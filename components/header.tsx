@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import Link from 'next/link'
-import { Menu, X } from 'lucide-react'
+import { usePathname, useRouter } from 'next/navigation'
+import { Menu } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Sheet,
@@ -23,56 +24,109 @@ const navLinks = [
 ]
 
 export function Header() {
+  const pathname = usePathname()
+  const router = useRouter()
+  const isHomePage = pathname === '/'
   const [isScrolled, setIsScrolled] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
+  const sectionIds = useMemo(
+    () => navLinks.map(link => link.href.replace('#', '')),
+    []
+  )
+
+  const scrollToSection = useCallback((href: string) => {
+    if (!isHomePage) {
+      router.push(`/${href}`)
+      return
+    }
+
+    const sectionId = href.replace('#', '')
+    const element = document.getElementById(sectionId)
+    if (!element) return
+
+    setActiveSection(sectionId)
+    window.history.replaceState(null, '', href)
+    element.scrollIntoView({ behavior: 'smooth' })
+  }, [isHomePage, router])
 
   useEffect(() => {
-    let rafId: number | null = null
-
     const handleScroll = () => {
-      if (rafId) return
-      rafId = requestAnimationFrame(() => {
-        setIsScrolled(window.scrollY > 50)
-
-        // Update active section — iterate in reverse order (bottom to top)
-        // and pick the first section whose top is above the viewport threshold
-        const sectionIds = navLinks.map(link => link.href.replace('#', ''))
-        let found = false
-        for (let i = sectionIds.length - 1; i >= 0; i--) {
-          const element = document.getElementById(sectionIds[i])
-          if (element) {
-            const rect = element.getBoundingClientRect()
-            if (rect.top <= 150) {
-              setActiveSection(sectionIds[i])
-              found = true
-              break
-            }
-          }
-        }
-        // If no section matched (e.g. at very top), default to first
-        if (!found) {
-          setActiveSection(sectionIds[0])
-        }
-
-        rafId = null
-      })
+      if (!isHomePage) {
+        setIsScrolled(true)
+        return
+      }
+      setIsScrolled(window.scrollY > 50)
     }
 
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    // Run once on mount to set initial state
     handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+
     return () => {
       window.removeEventListener('scroll', handleScroll)
-      if (rafId) cancelAnimationFrame(rafId)
     }
-  }, [])
+  }, [isHomePage])
 
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
+  useEffect(() => {
+    if (!isHomePage) {
+      return
     }
-  }
+
+    const sections = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter((element): element is HTMLElement => element !== null)
+
+    if (sections.length === 0) return
+
+    const updateActiveByPosition = () => {
+      const viewportMiddle = window.innerHeight * 0.45
+      let nextActive = sectionIds[0]
+      let bestDistance = Number.POSITIVE_INFINITY
+
+      for (const section of sections) {
+        const rect = section.getBoundingClientRect()
+        const distance = Math.abs(rect.top - viewportMiddle)
+        if (distance < bestDistance) {
+          bestDistance = distance
+          nextActive = section.id
+        }
+      }
+
+      setActiveSection(nextActive)
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntries = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)
+
+        if (visibleEntries.length > 0) {
+          const nextId = visibleEntries[0].target.id
+          setActiveSection(nextId)
+        }
+      },
+      {
+        threshold: [0.2, 0.4, 0.6],
+        rootMargin: '-20% 0px -55% 0px',
+      }
+    )
+
+    sections.forEach((section) => observer.observe(section))
+    updateActiveByPosition()
+
+    const handleHashChange = () => {
+      const sectionId = window.location.hash.replace('#', '')
+      if (sectionId && sectionIds.includes(sectionId)) {
+        setActiveSection(sectionId)
+      }
+    }
+    window.addEventListener('hashchange', handleHashChange)
+
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('hashchange', handleHashChange)
+    }
+  }, [isHomePage, sectionIds])
 
   return (
     <header
@@ -86,7 +140,7 @@ export function Header() {
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 lg:h-20 lg:px-8">
         {/* Logo */}
         <Link
-          href="#home"
+          href={isHomePage ? '#home' : '/#home'}
           onClick={(e) => {
             e.preventDefault()
             scrollToSection('#home')
@@ -106,7 +160,8 @@ export function Header() {
         {/* Desktop Navigation with magnetic hover effects */}
         <div className="hidden items-center gap-8 lg:flex">
           {navLinks.map((link) => {
-            const isActive = activeSection === link.href.replace('#', '')
+            const isActive =
+              isHomePage && activeSection === link.href.replace('#', '')
             return (
               <MagneticLink
                 key={link.href}
@@ -124,6 +179,25 @@ export function Header() {
               </MagneticLink>
             )
           })}
+          <Link
+            href="/tim-lips"
+            className={cn(
+              'group relative font-sans text-sm font-medium tracking-wide transition-colors',
+              pathname === '/tim-lips'
+                ? 'text-gold'
+                : isScrolled
+                  ? 'text-foreground/80 hover:text-foreground'
+                  : 'text-white/80 hover:text-white'
+            )}
+          >
+            Tim Lips
+            <span
+              className={cn(
+                'absolute -bottom-1 left-0 h-0.5 bg-gold transition-all duration-300 ease-out',
+                pathname === '/tim-lips' ? 'w-full' : 'w-0 group-hover:w-full'
+              )}
+            />
+          </Link>
         </div>
 
         {/* Desktop CTA */}
@@ -158,7 +232,7 @@ export function Header() {
           </SheetTrigger>
           <SheetContent side="right" className="w-full bg-background sm:max-w-sm">
             <SheetTitle className="sr-only">Navigatie Menu</SheetTitle>
-            <div className="flex h-full flex-col pl-6">
+            <div className="flex h-full flex-col px-6">
               <div className="flex items-center py-4">
                 <img
                   src="/images/lips-logo.png"
@@ -174,7 +248,7 @@ export function Header() {
                       onClick={() => scrollToSection(link.href)}
                       className={cn(
                         'flex w-full items-center py-4 font-sans text-lg font-medium transition-colors',
-                        activeSection === link.href.replace('#', '')
+                        isHomePage && activeSection === link.href.replace('#', '')
                           ? 'text-gold'
                           : 'text-foreground hover:text-gold'
                       )}
@@ -183,6 +257,19 @@ export function Header() {
                     </button>
                   </SheetClose>
                 ))}
+                <SheetClose asChild>
+                  <Link
+                    href="/tim-lips"
+                    className={cn(
+                      'flex w-full items-center py-4 font-sans text-lg font-medium transition-colors',
+                      pathname === '/tim-lips'
+                        ? 'text-gold'
+                        : 'text-foreground hover:text-gold'
+                    )}
+                  >
+                    Tim Lips
+                  </Link>
+                </SheetClose>
               </nav>
 
               <div className="border-t border-border py-6">

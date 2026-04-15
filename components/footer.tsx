@@ -10,17 +10,18 @@ const socialLinks = [
 
 const footerLinks = {
   navigatie: [
-    { label: 'Home', href: '#home' },
-    { label: 'Onze Paarden', href: '#paarden' },
-    { label: 'Diensten', href: '#diensten' },
-    { label: 'Erfgoed', href: '#erfgoed' },
-    { label: 'Contact', href: '#contact' },
+    { label: 'Home', href: '/#home' },
+    { label: 'Onze Paarden', href: '/#paarden' },
+    { label: 'Diensten', href: '/#diensten' },
+    { label: 'Erfgoed', href: '/#erfgoed' },
+    { label: 'Tim Lips', href: '/tim-lips' },
+    { label: 'Contact', href: '/#contact' },
   ],
   diensten: [
-    { label: 'Premium Fokkerij', href: '#diensten' },
-    { label: 'Professionele Training', href: '#diensten' },
-    { label: 'Veterinaire Zorg', href: '#diensten' },
-    { label: 'Luxe Stalling', href: '#diensten' },
+    { label: 'Premium Fokkerij', href: '/#diensten' },
+    { label: 'Professionele Training', href: '/#diensten' },
+    { label: 'Veterinaire Zorg', href: '/#diensten' },
+    { label: 'Luxe Stalling', href: '/#diensten' },
   ],
 }
 

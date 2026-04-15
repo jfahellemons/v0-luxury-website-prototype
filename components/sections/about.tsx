@@ -28,7 +28,7 @@ export function AboutSection() {
             <div className="mb-6 h-0.5 w-16 bg-gold" />
             
             <h2 className="mb-6 font-sans text-3xl font-semibold text-foreground md:text-4xl lg:text-5xl">
-              Een Erfgoed van Excellentie
+              Erfgoed
             </h2>
             
             <div className="space-y-4 font-sans text-base leading-relaxed text-muted-foreground md:text-lg">

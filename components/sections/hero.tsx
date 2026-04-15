@@ -36,7 +36,7 @@ export function HeroSection() {
             isVideoLoaded ? 'opacity-0' : 'opacity-100'
           }`}
           style={{
-            backgroundImage: 'url(/images/hero-fallback.jpg)',
+            // backgroundImage: 'url(/images/hero-fallback.jpg)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}

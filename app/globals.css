@@ -162,8 +162,36 @@
   border-bottom: 1px solid rgba(212, 175, 55, 0.15);
 }
 
+/* Horizontal sponsor banner animation */
+.logo-banner-mask {
+  position: relative;
+}
+
+.logo-banner-track {
+  display: inline-flex;
+  width: max-content;
+  gap: 1.25rem;
+  align-items: center;
+  white-space: nowrap;
+  animation: logo-scroll 26s linear infinite;
+  will-change: transform;
+}
+
+@keyframes logo-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-50% - 0.625rem));
+  }
+}
+
 /* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
+  .logo-banner-track {
+    animation: none;
+  }
+
   *,
   *::before,
   *::after {

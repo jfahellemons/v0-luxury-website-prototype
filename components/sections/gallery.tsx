@@ -114,7 +114,7 @@ export function GallerySection() {
           <div className="mx-auto mb-16 max-w-2xl text-center">
             <div className="mx-auto mb-6 h-0.5 w-16 bg-gold" />
             <h2 className="mb-4 font-sans text-3xl font-semibold text-foreground md:text-4xl lg:text-5xl">
-              Onze Collectie
+              Onze Paarden
             </h2>
             <p className="font-sans text-base leading-relaxed text-muted-foreground md:text-lg">
               Ontdek onze zorgvuldig geselecteerde paarden, elk gefokt en getraind 
@@ -159,19 +159,25 @@ export function GallerySection() {
         {/* Modal */}
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogContent 
-            className="max-h-[90vh] max-w-4xl overflow-y-auto border-0 bg-background p-0"
+            className="max-h-[90vh] max-w-6xl overflow-y-auto border-0 bg-background p-0"
             showCloseButton={false}
           >
             {selectedHorse && (
-              <div className="grid lg:grid-cols-2">
+              <div className="flex flex-col">
+                {/* Close Button */}
+                <DialogClose className="absolute right-4 top-4 z-20 rounded-full bg-white/90 p-2 text-foreground transition-colors hover:bg-gold hover:text-gold-foreground">
+                  <X className="h-5 w-5" />
+                  <span className="sr-only">Sluiten</span>
+                </DialogClose>
+
                 {/* Image */}
-                <div className="relative aspect-square lg:aspect-auto">
+                <div className="relative aspect-square bg-muted/40 sm:aspect-[5/4] lg:aspect-[16/10]">
                   <Image
                     src={selectedHorse.image}
                     alt={selectedHorse.name}
                     fill
                     className="object-cover"
-                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    sizes="100vw"
                   />
                   
                   {/* Navigation Arrows */}
@@ -193,12 +199,6 @@ export function GallerySection() {
 
                 {/* Details */}
                 <div className="flex flex-col p-8 lg:p-10">
-                  {/* Close Button */}
-                  <DialogClose className="absolute right-4 top-4 rounded-full bg-muted p-2 text-foreground transition-colors hover:bg-gold hover:text-gold-foreground lg:right-6 lg:top-6">
-                    <X className="h-5 w-5" />
-                    <span className="sr-only">Sluiten</span>
-                  </DialogClose>
-
                   <DialogTitle className="font-sans text-3xl font-bold text-foreground lg:text-4xl">
                     {selectedHorse.name}
                   </DialogTitle>
@@ -253,7 +253,7 @@ export function GallerySection() {
                   </div>
 
                   {/* CTA */}
-                  <div className="mt-auto pt-8">
+                  <div className="mt-8">
                     <Button 
                       className="w-full bg-gold text-gold-foreground hover:bg-gold-hover"
                       onClick={() => {
