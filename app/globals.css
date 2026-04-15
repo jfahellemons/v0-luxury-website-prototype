@@ -58,10 +58,10 @@
 }
 
 @theme inline {
-  /* Typography - Playfair Display (headings) + Inter (body) */
-  --font-sans: var(--font-sans), 'Inter', 'Inter Fallback', system-ui, sans-serif;
-  --font-serif: var(--font-serif), 'Playfair Display', 'Playfair Display Fallback', Georgia, serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  /* Typography - Geist (modern, clean luxury) */
+  --font-sans: var(--font-sans), 'Geist', 'Geist Fallback', system-ui, sans-serif;
+  --font-serif: var(--font-sans), 'Geist', 'Geist Fallback', system-ui, sans-serif;
+  --font-mono: var(--font-mono), 'Geist Mono', 'Geist Mono Fallback', monospace;
   
   /* Color System */
   --color-background: var(--background);
@@ -122,8 +122,8 @@
   
   /* Luxury Typography Base */
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif tracking-tight;
-    letter-spacing: 0.02em;
+    @apply font-sans tracking-tight;
+    letter-spacing: -0.02em;
   }
   
   h1 {

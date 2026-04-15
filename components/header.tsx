@@ -71,7 +71,7 @@ export function Header() {
             e.preventDefault()
             scrollToSection('#home')
           }}
-          className="font-serif text-xl font-bold tracking-wide text-foreground transition-colors hover:text-gold lg:text-2xl"
+          className="font-sans text-xl font-bold tracking-wide text-foreground transition-colors hover:text-gold lg:text-2xl"
         >
           Lips Stables
         </Link>
@@ -119,7 +119,7 @@ export function Header() {
             <SheetTitle className="sr-only">Navigatie Menu</SheetTitle>
             <div className="flex h-full flex-col">
               <div className="flex items-center justify-between py-4">
-                <span className="font-serif text-xl font-bold">Lips Stables</span>
+                <span className="font-sans text-xl font-bold">Lips Stables</span>
               </div>
               
               <nav className="flex flex-1 flex-col gap-1 pt-8">

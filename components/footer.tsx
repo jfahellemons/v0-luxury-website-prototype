@@ -33,7 +33,7 @@ export function Footer() {
         <div className="grid gap-12 lg:grid-cols-4">
           {/* Brand */}
           <div className="lg:col-span-1">
-            <Link href="#home" className="inline-block font-serif text-2xl font-bold text-white">
+            <Link href="#home" className="inline-block font-sans text-2xl font-bold text-white">
               Lips Stables
             </Link>
             <p className="mt-4 font-sans text-sm leading-relaxed text-white/70">
@@ -63,7 +63,7 @@ export function Footer() {
 
           {/* Navigation Links */}
           <div>
-            <h3 className="font-serif text-lg font-semibold text-white">Navigatie</h3>
+            <h3 className="font-sans text-lg font-semibold text-white">Navigatie</h3>
             <ul className="mt-4 space-y-3">
               {footerLinks.navigatie.map((link) => (
                 <li key={link.label}>
@@ -80,7 +80,7 @@ export function Footer() {
 
           {/* Services Links */}
           <div>
-            <h3 className="font-serif text-lg font-semibold text-white">Diensten</h3>
+            <h3 className="font-sans text-lg font-semibold text-white">Diensten</h3>
             <ul className="mt-4 space-y-3">
               {footerLinks.diensten.map((link) => (
                 <li key={link.label}>
@@ -97,7 +97,7 @@ export function Footer() {
 
           {/* Contact Info */}
           <div>
-            <h3 className="font-serif text-lg font-semibold text-white">Contact</h3>
+            <h3 className="font-sans text-lg font-semibold text-white">Contact</h3>
             <div className="mt-4 space-y-3 font-sans text-sm text-white/70">
               <p>
                 Stalweg 42<br />

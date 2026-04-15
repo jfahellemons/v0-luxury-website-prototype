@@ -27,7 +27,7 @@ export function AboutSection() {
           <FadeIn direction="right" delay={0.2}>
             <div className="mb-6 h-0.5 w-16 bg-gold" />
             
-            <h2 className="mb-6 font-serif text-3xl font-semibold text-foreground md:text-4xl lg:text-5xl">
+            <h2 className="mb-6 font-sans text-3xl font-semibold text-foreground md:text-4xl lg:text-5xl">
               Een Erfgoed van Excellentie
             </h2>
             
@@ -58,15 +58,15 @@ export function AboutSection() {
             {/* Stats */}
             <div className="mt-10 grid grid-cols-3 gap-8 border-t border-border pt-10">
               <div>
-                <p className="font-serif text-3xl font-bold text-gold md:text-4xl">70+</p>
+                <p className="font-sans text-3xl font-bold text-gold md:text-4xl">70+</p>
                 <p className="mt-1 font-sans text-sm text-muted-foreground">Jaren Ervaring</p>
               </div>
               <div>
-                <p className="font-serif text-3xl font-bold text-gold md:text-4xl">500+</p>
+                <p className="font-sans text-3xl font-bold text-gold md:text-4xl">500+</p>
                 <p className="mt-1 font-sans text-sm text-muted-foreground">Gefokte Paarden</p>
               </div>
               <div>
-                <p className="font-serif text-3xl font-bold text-gold md:text-4xl">50+</p>
+                <p className="font-sans text-3xl font-bold text-gold md:text-4xl">50+</p>
                 <p className="mt-1 font-sans text-sm text-muted-foreground">Kampioenen</p>
               </div>
             </div>

@@ -67,7 +67,7 @@ export function HeroSection() {
           Premium Paardenfokkerij sinds 1952
         </p>
         
-        <h1 className="mb-6 font-serif text-4xl font-bold leading-tight text-white md:text-6xl lg:text-7xl">
+        <h1 className="mb-6 font-sans text-4xl font-bold leading-tight text-white md:text-6xl lg:text-7xl">
           <span className="text-balance">
             Ervaar Hippische
             <br className="hidden sm:inline" />

@@ -1,17 +1,17 @@
 import type { Metadata, Viewport } from 'next'
-import { Playfair_Display, Inter } from 'next/font/google'
+import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
-const playfairDisplay = Playfair_Display({ 
+const geistSans = Geist({ 
   subsets: ['latin'],
-  variable: '--font-serif',
+  variable: '--font-sans',
   display: 'swap',
 })
 
-const inter = Inter({ 
+const geistMono = Geist_Mono({ 
   subsets: ['latin'],
-  variable: '--font-sans',
+  variable: '--font-mono',
   display: 'swap',
 })
 
@@ -40,7 +40,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="nl" className={`${playfairDisplay.variable} ${inter.variable} bg-background scroll-smooth`}>
+    <html lang="nl" className={`${geistSans.variable} ${geistMono.variable} bg-background scroll-smooth`}>
       <body className="font-sans antialiased">
         {/* Skip to main content link for accessibility */}
         <a 

@@ -31,7 +31,7 @@ export function ContactSection() {
         <FadeIn>
           <div className="mx-auto mb-16 max-w-2xl text-center">
             <div className="mx-auto mb-6 h-0.5 w-16 bg-gold" />
-            <h2 className="mb-4 font-serif text-3xl font-semibold text-foreground md:text-4xl lg:text-5xl">
+            <h2 className="mb-4 font-sans text-3xl font-semibold text-foreground md:text-4xl lg:text-5xl">
               Begin Uw Reis
             </h2>
             <p className="font-sans text-base leading-relaxed text-muted-foreground md:text-lg">
@@ -44,7 +44,7 @@ export function ContactSection() {
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
           {/* Contact Info */}
           <FadeIn direction="left">
-            <h3 className="mb-8 font-serif text-2xl font-semibold text-foreground">
+            <h3 className="mb-8 font-sans text-2xl font-semibold text-foreground">
               Contactgegevens
             </h3>
             
@@ -117,7 +117,7 @@ export function ContactSection() {
                 <div className="mb-6 rounded-full bg-gold/10 p-4">
                   <Send className="h-8 w-8 text-gold" />
                 </div>
-                <h3 className="mb-2 font-serif text-2xl font-semibold text-foreground">
+                <h3 className="mb-2 font-sans text-2xl font-semibold text-foreground">
                   Bericht Verzonden
                 </h3>
                 <p className="font-sans text-muted-foreground">
