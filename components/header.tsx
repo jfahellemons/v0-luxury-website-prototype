@@ -11,6 +11,7 @@ import {
   SheetClose,
   SheetTitle,
 } from '@/components/ui/sheet'
+import { MagneticLink } from '@/components/animations/magnetic-link'
 import { cn } from '@/lib/utils'
 
 const navLinks = [
@@ -57,9 +58,9 @@ export function Header() {
   return (
     <header
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
         isScrolled
-          ? 'bg-background/98 shadow-sm backdrop-blur-sm'
+          ? 'bg-background/70 shadow-lg shadow-espresso/5 backdrop-blur-xl border-b border-gold/15'
           : 'bg-transparent'
       )}
     >
@@ -71,30 +72,39 @@ export function Header() {
             e.preventDefault()
             scrollToSection('#home')
           }}
-          className="font-sans text-xl font-bold tracking-wide text-foreground transition-colors hover:text-gold lg:text-2xl"
+          className="flex items-center gap-3 transition-all duration-500"
         >
-          Lips Stables
+          <img
+            src="/images/lips-logo.png"
+            alt="Lips Stables"
+            className={cn(
+              'transition-all duration-500',
+              isScrolled ? 'h-10 lg:h-12' : 'h-12 lg:h-14'
+            )}
+          />
         </Link>
 
-        {/* Desktop Navigation */}
+        {/* Desktop Navigation with magnetic hover effects */}
         <div className="hidden items-center gap-8 lg:flex">
-          {navLinks.map((link) => (
-            <button
-              key={link.href}
-              onClick={() => scrollToSection(link.href)}
-              className={cn(
-                'relative font-sans text-sm font-medium tracking-wide transition-colors',
-                activeSection === link.href.replace('#', '')
-                  ? 'text-gold'
-                  : 'text-foreground/80 hover:text-foreground'
-              )}
-            >
-              {link.label}
-              {activeSection === link.href.replace('#', '') && (
-                <span className="absolute -bottom-1 left-0 h-0.5 w-full bg-gold" />
-              )}
-            </button>
-          ))}
+          {navLinks.map((link) => {
+            const isActive = activeSection === link.href.replace('#', '')
+            return (
+              <MagneticLink
+                key={link.href}
+                onClick={() => scrollToSection(link.href)}
+                isActive={isActive}
+                className={cn(
+                  isActive
+                    ? 'text-gold'
+                    : isScrolled
+                      ? 'text-foreground/80 hover:text-foreground'
+                      : 'text-white/80 hover:text-white'
+                )}
+              >
+                {link.label}
+              </MagneticLink>
+            )
+          })}
         </div>
 
         {/* Desktop CTA */}
@@ -102,7 +112,12 @@ export function Header() {
           <Button
             variant="outline"
             onClick={() => scrollToSection('#contact')}
-            className="border-gold bg-transparent text-gold hover:bg-gold hover:text-gold-foreground"
+            className={cn(
+              'transition-all duration-500',
+              isScrolled
+                ? 'border-gold bg-transparent text-gold hover:bg-gold hover:text-gold-foreground'
+                : 'border-white/40 bg-transparent text-white hover:bg-white/10 hover:text-white'
+            )}
           >
             Neem Contact Op
           </Button>
@@ -111,17 +126,29 @@ export function Header() {
         {/* Mobile Menu */}
         <Sheet>
           <SheetTrigger asChild className="lg:hidden">
-            <Button variant="ghost" size="icon" aria-label="Open menu">
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label="Open menu"
+              className={cn(
+                isScrolled ? 'text-foreground' : 'text-white'
+              )}
+            >
               <Menu className="h-6 w-6" />
             </Button>
           </SheetTrigger>
           <SheetContent side="right" className="w-full bg-background sm:max-w-sm">
             <SheetTitle className="sr-only">Navigatie Menu</SheetTitle>
             <div className="flex h-full flex-col">
-              <div className="flex items-center justify-between py-4">
+              <div className="flex items-center gap-3 py-4">
+                <img
+                  src="/images/lips-logo.png"
+                  alt="Lips Stables"
+                  className="h-10"
+                />
                 <span className="font-sans text-xl font-bold">Lips Stables</span>
               </div>
-              
+
               <nav className="flex flex-1 flex-col gap-1 pt-8">
                 {navLinks.map((link) => (
                   <SheetClose asChild key={link.href}>
