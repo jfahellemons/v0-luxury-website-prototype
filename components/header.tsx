@@ -27,25 +27,44 @@ export function Header() {
   const [activeSection, setActiveSection] = useState('home')
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50)
+    let rafId: number | null = null
 
-      // Update active section based on scroll position
-      const sections = navLinks.map(link => link.href.replace('#', ''))
-      for (const section of sections.reverse()) {
-        const element = document.getElementById(section)
-        if (element) {
-          const rect = element.getBoundingClientRect()
-          if (rect.top <= 100) {
-            setActiveSection(section)
-            break
+    const handleScroll = () => {
+      if (rafId) return
+      rafId = requestAnimationFrame(() => {
+        setIsScrolled(window.scrollY > 50)
+
+        // Update active section — iterate in reverse order (bottom to top)
+        // and pick the first section whose top is above the viewport threshold
+        const sectionIds = navLinks.map(link => link.href.replace('#', ''))
+        let found = false
+        for (let i = sectionIds.length - 1; i >= 0; i--) {
+          const element = document.getElementById(sectionIds[i])
+          if (element) {
+            const rect = element.getBoundingClientRect()
+            if (rect.top <= 150) {
+              setActiveSection(sectionIds[i])
+              found = true
+              break
+            }
           }
         }
-      }
+        // If no section matched (e.g. at very top), default to first
+        if (!found) {
+          setActiveSection(sectionIds[0])
+        }
+
+        rafId = null
+      })
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
+    // Run once on mount to set initial state
+    handleScroll()
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      if (rafId) cancelAnimationFrame(rafId)
+    }
   }, [])
 
   const scrollToSection = (href: string) => {
@@ -139,14 +158,13 @@ export function Header() {
           </SheetTrigger>
           <SheetContent side="right" className="w-full bg-background sm:max-w-sm">
             <SheetTitle className="sr-only">Navigatie Menu</SheetTitle>
-            <div className="flex h-full flex-col">
-              <div className="flex items-center gap-3 py-4">
+            <div className="flex h-full flex-col pl-6">
+              <div className="flex items-center py-4">
                 <img
                   src="/images/lips-logo.png"
                   alt="Lips Stables"
                   className="h-10"
                 />
-                <span className="font-sans text-xl font-bold">Lips Stables</span>
               </div>
 
               <nav className="flex flex-1 flex-col gap-1 pt-8">
