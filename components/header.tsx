@@ -29,6 +29,7 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [pendingMobileHref, setPendingMobileHref] = useState<string | null>(null)
   const sectionIds = useMemo(
     () => navLinks.map(link => link.href.replace('#', '')),
     []
@@ -50,12 +51,25 @@ export function Header() {
   }, [isHomePage, router])
 
   const handleMobileNavigation = useCallback((href: string) => {
+    setPendingMobileHref(href)
     setIsMobileMenuOpen(false)
-    // Run navigation after close state is queued to avoid Sheet focus/portal conflicts on mobile.
-    requestAnimationFrame(() => {
-      scrollToSection(href)
-    })
-  }, [scrollToSection])
+  }, [])
+
+  useEffect(() => {
+    if (isMobileMenuOpen || !pendingMobileHref) {
+      return
+    }
+
+    // Wait for sheet teardown/body unlock before attempting section scroll on mobile.
+    const timer = window.setTimeout(() => {
+      scrollToSection(pendingMobileHref)
+      setPendingMobileHref(null)
+    }, 50)
+
+    return () => {
+      window.clearTimeout(timer)
+    }
+  }, [isMobileMenuOpen, pendingMobileHref, scrollToSection])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -266,7 +280,10 @@ export function Header() {
                 ))}
                 <Link
                   href="/tim-lips"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={() => {
+                    setPendingMobileHref(null)
+                    setIsMobileMenuOpen(false)
+                  }}
                   className={cn(
                     'flex w-full items-center py-4 font-sans text-lg font-medium transition-colors',
                     pathname === '/tim-lips'
