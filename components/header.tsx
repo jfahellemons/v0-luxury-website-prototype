@@ -9,7 +9,6 @@ import {
   Sheet,
   SheetContent,
   SheetTrigger,
-  SheetClose,
   SheetTitle,
 } from '@/components/ui/sheet'
 import { MagneticLink } from '@/components/animations/magnetic-link'
@@ -29,6 +28,7 @@ export function Header() {
   const isHomePage = pathname === '/'
   const [isScrolled, setIsScrolled] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const sectionIds = useMemo(
     () => navLinks.map(link => link.href.replace('#', '')),
     []
@@ -48,6 +48,14 @@ export function Header() {
     window.history.replaceState(null, '', href)
     element.scrollIntoView({ behavior: 'smooth' })
   }, [isHomePage, router])
+
+  const handleMobileNavigation = useCallback((href: string) => {
+    setIsMobileMenuOpen(false)
+    // Run navigation after close state is queued to avoid Sheet focus/portal conflicts on mobile.
+    requestAnimationFrame(() => {
+      scrollToSection(href)
+    })
+  }, [scrollToSection])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -217,7 +225,7 @@ export function Header() {
         </div>
 
         {/* Mobile Menu */}
-        <Sheet>
+        <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
           <SheetTrigger asChild className="lg:hidden">
             <Button
               variant="ghost"
@@ -243,44 +251,40 @@ export function Header() {
 
               <nav className="flex flex-1 flex-col gap-1 pt-8">
                 {navLinks.map((link) => (
-                  <SheetClose asChild key={link.href}>
-                    <button
-                      onClick={() => scrollToSection(link.href)}
-                      className={cn(
-                        'flex w-full items-center py-4 font-sans text-lg font-medium transition-colors',
-                        isHomePage && activeSection === link.href.replace('#', '')
-                          ? 'text-gold'
-                          : 'text-foreground hover:text-gold'
-                      )}
-                    >
-                      {link.label}
-                    </button>
-                  </SheetClose>
-                ))}
-                <SheetClose asChild>
-                  <Link
-                    href="/tim-lips"
+                  <button
+                    key={link.href}
+                    onClick={() => handleMobileNavigation(link.href)}
                     className={cn(
                       'flex w-full items-center py-4 font-sans text-lg font-medium transition-colors',
-                      pathname === '/tim-lips'
+                      isHomePage && activeSection === link.href.replace('#', '')
                         ? 'text-gold'
                         : 'text-foreground hover:text-gold'
                     )}
                   >
-                    Tim Lips
-                  </Link>
-                </SheetClose>
+                    {link.label}
+                  </button>
+                ))}
+                <Link
+                  href="/tim-lips"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={cn(
+                    'flex w-full items-center py-4 font-sans text-lg font-medium transition-colors',
+                    pathname === '/tim-lips'
+                      ? 'text-gold'
+                      : 'text-foreground hover:text-gold'
+                  )}
+                >
+                  Tim Lips
+                </Link>
               </nav>
 
               <div className="border-t border-border py-6">
-                <SheetClose asChild>
-                  <Button
-                    onClick={() => scrollToSection('#contact')}
-                    className="w-full bg-gold text-gold-foreground hover:bg-gold-hover"
-                  >
-                    Neem Contact Op
-                  </Button>
-                </SheetClose>
+                <Button
+                  onClick={() => handleMobileNavigation('#contact')}
+                  className="w-full bg-gold text-gold-foreground hover:bg-gold-hover"
+                >
+                  Neem Contact Op
+                </Button>
               </div>
             </div>
           </SheetContent>
